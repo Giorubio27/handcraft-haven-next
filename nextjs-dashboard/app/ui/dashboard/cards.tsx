@@ -3,14 +3,18 @@ import {
   ClockIcon,
   UserGroupIcon,
   InboxIcon,
+  ArchiveBoxIcon, // Example icon for collections
+  PaintBrushIcon, // Example icon for artisans
 } from '@heroicons/react/24/outline';
-import { lusitana } from '@/app/ui/fonts';
+
 
 const iconMap = {
   collected: BanknotesIcon,
   customers: UserGroupIcon,
   pending: ClockIcon,
   invoices: InboxIcon,
+  collections: ArchiveBoxIcon, // Example mapping for collections
+  artisans: PaintBrushIcon, // Example mapping for artisans
 };
 
 export default async function CardWrapper() {
@@ -37,7 +41,7 @@ export function Card({
 }: {
   title: string;
   value: number | string;
-  type: 'invoices' | 'customers' | 'pending' | 'collected';
+  type: 'invoices' | 'pending' | 'collected' | 'collections' | 'artisans';
 }) {
   const Icon = iconMap[type];
 
@@ -48,8 +52,7 @@ export function Card({
         <h3 className="ml-2 text-sm font-medium">{title}</h3>
       </div>
       <p
-        className={`${lusitana.className}
-          truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
+        className="truncate rounded-xl bg-white px-4 py-8 text-center text-2xl"
       >
         {value}
       </p>
