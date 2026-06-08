@@ -1,84 +1,147 @@
-// app/lib/placeholder-data.ts
-
+// This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
+// https://nextjs.org/learn/dashboard-app/fetching-data
 const users = [
   {
     id: '410544b2-4001-4271-9855-fec4b6a6442a',
-    name: 'Haven Admin',
-    email: 'admin@handcrafthaven.com',
-    password: 'securepassword123', // Will be hashed by bcrypt
+    name: 'User',
+    email: 'user@nextmail.com',
+    password: '123456',
   },
 ];
 
-const artisans = [
+const customers = [
   {
     id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa',
-    name: 'Elena Rostova',
-    email: 'elena@rostovaceramics.com',
-    bio: 'Master ceramicist specializing in wheel-thrown stoneware and crystalline glazes.',
-    image_url: '/artisans/elena-rostova.png',
+    name: 'Evil Rabbit',
+    email: 'evil@rabbit.com',
+    image_url: '/customers/evil-rabbit.png',
   },
   {
     id: '3958dc9e-712f-4377-85e9-fec4b6a6442a',
-    name: 'Marcus Vance',
-    email: 'marcus@vancewoodwork.com',
-    bio: 'Hand-carving heirloom furniture from sustainably sourced local hardwoods.',
-    image_url: '/artisans/marcus-vance.png',
+    name: 'Delba de Oliveira',
+    email: 'delba@oliveira.com',
+    image_url: '/customers/delba-de-oliveira.png',
   },
   {
     id: '3958dc9e-742f-4377-85e9-fec4b6a6442a',
-    name: 'Amina Mansoor',
-    email: 'amina@wovenhistory.com',
-    bio: 'Third-generation textile artist practicing traditional indigo dying and handloom weaving.',
-    image_url: '/artisans/amina-mansoor.png',
-  },
-];
-
-const collections = [
-  {
-    id: 'a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d',
-    artisan_id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa', // Elena
-    name: 'Earth & Ember',
-    description: 'Rustic, raw-clay exterior mugs and bowls designed for daily rituals.',
+    name: 'Lee Robinson',
+    email: 'lee@robinson.com',
+    image_url: '/customers/lee-robinson.png',
   },
   {
-    id: 'b2c3d4e5-f67a-8b9c-0d1e-2f3a4b5c6d7e',
-    artisan_id: '3958dc9e-712f-4377-85e9-fec4b6a6442a', // Marcus
-    name: 'Live Edge Serenity',
-    description: 'Stunning walnut and cherry dining tables preserving the natural silhouette of the tree.',
+    id: '76d65c26-f784-44a2-ac19-586678f7c2f2',
+    name: 'Michael Novotny',
+    email: 'michael@novotny.com',
+    image_url: '/customers/michael-novotny.png',
   },
   {
-    id: 'c3d4e5f6-7a8b-9c0d-1e2f-3a4b5c6d7e8f',
-    artisan_id: '3958dc9e-742f-4377-85e9-fec4b6a6442a', // Amina
-    name: 'Deep Indigo Skies',
-    description: 'Heritage wall tapestries and throw pillows dyed with organic plant matter.',
+    id: 'CC27C14A-0ACF-4F4A-A6C9-D45682C144B9',
+    name: 'Amy Burns',
+    email: 'amy@burns.com',
+    image_url: '/customers/amy-burns.png',
+  },
+  {
+    id: '13D07535-C59E-4157-A011-F8D2EF4E0CBB',
+    name: 'Balazs Orban',
+    email: 'balazs@orban.com',
+    image_url: '/customers/balazs-orban.png',
   },
 ];
 
 const invoices = [
   {
-    artisan_id: artisans[0].id,
-    amount: 12500, // $125.00
-    status: 'paid',
-    date: '2026-05-12',
-  },
-  {
-    artisan_id: artisans[1].id,
-    amount: 240000, // $2,400.00
+    customer_id: customers[0].id,
+    amount: 15795,
     status: 'pending',
-    date: '2026-06-01',
+    date: '2022-12-06',
   },
   {
-    artisan_id: artisans[2].id,
-    amount: 45000, // $450.00
-    status: 'paid',
-    date: '2026-05-28',
-  },
-  {
-    artisan_id: artisans[0].id,
-    amount: 8500, // $85.00
+    customer_id: customers[1].id,
+    amount: 20348,
     status: 'pending',
-    date: '2026-06-05',
+    date: '2022-11-14',
+  },
+  {
+    customer_id: customers[4].id,
+    amount: 3040,
+    status: 'paid',
+    date: '2022-10-29',
+  },
+  {
+    customer_id: customers[3].id,
+    amount: 44800,
+    status: 'paid',
+    date: '2023-09-10',
+  },
+  {
+    customer_id: customers[5].id,
+    amount: 34577,
+    status: 'pending',
+    date: '2023-08-05',
+  },
+  {
+    customer_id: customers[2].id,
+    amount: 54246,
+    status: 'pending',
+    date: '2023-07-16',
+  },
+  {
+    customer_id: customers[0].id,
+    amount: 666,
+    status: 'pending',
+    date: '2023-06-27',
+  },
+  {
+    customer_id: customers[3].id,
+    amount: 32545,
+    status: 'paid',
+    date: '2023-06-09',
+  },
+  {
+    customer_id: customers[4].id,
+    amount: 1250,
+    status: 'paid',
+    date: '2023-06-17',
+  },
+  {
+    customer_id: customers[5].id,
+    amount: 8546,
+    status: 'paid',
+    date: '2023-06-07',
+  },
+  {
+    customer_id: customers[1].id,
+    amount: 500,
+    status: 'paid',
+    date: '2023-08-19',
+  },
+  {
+    customer_id: customers[5].id,
+    amount: 8945,
+    status: 'paid',
+    date: '2023-06-03',
+  },
+  {
+    customer_id: customers[2].id,
+    amount: 1000,
+    status: 'paid',
+    date: '2022-06-05',
   },
 ];
 
-export { users, artisans, collections, invoices };
+const revenue = [
+  { month: 'Jan', revenue: 2000 },
+  { month: 'Feb', revenue: 1800 },
+  { month: 'Mar', revenue: 2200 },
+  { month: 'Apr', revenue: 2500 },
+  { month: 'May', revenue: 2300 },
+  { month: 'Jun', revenue: 3200 },
+  { month: 'Jul', revenue: 3500 },
+  { month: 'Aug', revenue: 3700 },
+  { month: 'Sep', revenue: 2500 },
+  { month: 'Oct', revenue: 2800 },
+  { month: 'Nov', revenue: 3000 },
+  { month: 'Dec', revenue: 4800 },
+];
+
+export { users, customers, invoices, revenue };
