@@ -1,88 +1,79 @@
-// This file contains type definitions for your data.
-// It describes the shape of the data, and what data type each property should accept.
-// For simplicity of teaching, we're manually defining these types.
-// However, these types are generated automatically if you're using an ORM such as Prisma.
+// app/lib/definitions.ts
+
 export type User = {
   id: string;
   name: string;
   email: string;
-  password: string;
+  password?: string; // Optional so you don't accidentally pass hashed passwords around the UI
 };
 
-export type Customer = {
+export type Artisan = {
   id: string;
   name: string;
   email: string;
+  bio: string;
   image_url: string;
+};
+
+export type Collection = {
+  id: string;
+  artisan_id: string;
+  name: string;
+  description: string;
 };
 
 export type Invoice = {
-  id: string;
-  customer_id: string;
+  id?: string; // Optional if generated automatically by your DB on insertion
+  artisan_id: string;
   amount: number;
+  status: 'paid' | 'pending';
   date: string;
-  // In TypeScript, this is called a string union type.
-  // It means that the "status" property can only be one of the two strings: 'pending' or 'paid'.
-  status: 'pending' | 'paid';
 };
 
-export type Revenue = {
-  month: string;
-  revenue: number;
-};
-
-export type LatestInvoice = {
+// Used for simple selection lists (like choosing an artisan when creating an invoice)
+export type ArtisanField = {
   id: string;
   name: string;
-  image_url: string;
-  email: string;
-  amount: string;
 };
 
-// The database returns a number for amount, but we later format it to a string with the formatCurrency function
-export type LatestInvoiceRaw = Omit<LatestInvoice, 'amount'> & {
-  amount: number;
-};
-
+// Used when displaying combined data in a table view
 export type InvoicesTable = {
   id: string;
-  customer_id: string;
+  artisan_id: string;
+  amount: number;
+  date: string;
+  status: 'paid' | 'pending';
   name: string;
   email: string;
   image_url: string;
-  date: string;
-  amount: number;
-  status: 'pending' | 'paid';
 };
 
-export type CustomersTableType = {
+// What the PostgreSQL query returns before number conversion/formatting
+export type ArtisanRawSummary = {
   id: string;
   name: string;
   email: string;
   image_url: string;
+  bio: string;
   total_invoices: number;
   total_pending: number;
   total_paid: number;
 };
 
-export type FormattedCustomersTable = {
+// What your Artisan component loops through after running formatCurrency()
+export type ArtisanTotalSummary = {
   id: string;
   name: string;
   email: string;
   image_url: string;
+  bio: string;
   total_invoices: number;
-  total_pending: string;
-  total_paid: string;
+  total_pending: string; // Formatted string: "$240.00"
+  total_paid: string;    // Formatted string: "$125.00"
 };
 
-export type CustomerField = {
-  id: string;
-  name: string;
-};
-
-export type InvoiceForm = {
-  id: string;
-  customer_id: string;
-  amount: number;
-  status: 'pending' | 'paid';
+// For the Revenue Chart
+export type Revenue = {
+  month: string;
+  revenue: number;
 };
