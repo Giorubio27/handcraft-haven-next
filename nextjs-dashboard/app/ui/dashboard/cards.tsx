@@ -41,7 +41,7 @@ export function Card({
 }: {
   title: string;
   value: number | string;
-  type: 'invoices' | 'pending' | 'collected' | 'collections' | 'artisans';
+  type: 'invoices' | 'pending' | 'collected' | 'collections' | 'artisans' | 'customers';
 }) {
   const Icon = iconMap[type];
 
