@@ -26,7 +26,7 @@ export default async function Page() {
           <RevenueChart />
         </Suspense>
         <Suspense fallback={<LatestInvoicesSkeleton />}>
-          <RevenueChart />
+          <LatestInvoices />
         </Suspense>
 
       </div>
