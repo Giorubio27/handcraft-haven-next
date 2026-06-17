@@ -14,6 +14,29 @@ import { formatCurrency } from './utils';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
+export async function fetchFilteredProducts(query: string, category: string, maxPrice: number) {
+  // Convert price limit to cents for database compliance (default to a high number if blank)
+  const maxPriceInCents = maxPrice ? Math.round(maxPrice * 100) : 99999999; 
+  const searchString = `%${query}%`;
+
+  try {
+    const products = await sql`
+      SELECT products.*, artisans.name as artisan_name 
+      FROM products
+      JOIN artisans ON products.artisan_id = artisans.id
+      WHERE 
+        (products.title ILIKE ${searchString} OR products.description ILIKE ${searchString})
+        AND (${category} = '' OR products.category = ${category})
+        AND products.price <= ${maxPriceInCents}
+      ORDER BY products.title ASC
+    `;
+    return products;
+  } catch (error) {
+    console.error('Database Error fetching filtered products:', error);
+    throw new Error('Failed to fetch marketplace catalog.');
+  }
+}
+
 export async function fetchRevenue() {
   try {
     // Artificially delay a response for demo purposes.
