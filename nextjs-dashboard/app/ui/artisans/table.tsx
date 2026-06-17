@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { fetchFilteredArtisans } from '@/app/lib/data';
-import { UpdateArtisan, DeleteArtisan } from './buttons';
+import { CreateArtisan, UpdateArtisan, DeleteArtisan } from './buttons';
 
 export default async function ArtisansTable({
   query,

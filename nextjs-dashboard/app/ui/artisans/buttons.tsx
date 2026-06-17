@@ -1,6 +1,11 @@
+
+
+// app/ui/artisans/buttons.tsx
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { deleteArtisan } from '@/app/lib/actions'; // Import the newly created action
 
+// INVOICE STYLE: Main Create CTA
 export function CreateArtisan() {
   return (
     <Link
@@ -13,10 +18,11 @@ export function CreateArtisan() {
   );
 }
 
+// INVOICE STYLE: Updates the dynamic route path
 export function UpdateArtisan({ id }: { id: string }) {
   return (
     <Link
-      href="/dashboard/artisans"
+      href={`/dashboard/artisans/${id}/edit`} // Points to the dynamic [id]/edit/page.tsx route
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PencilIcon className="w-5" />
@@ -24,13 +30,18 @@ export function UpdateArtisan({ id }: { id: string }) {
   );
 }
 
+// INVOICE STYLE: Direct Action Form Submission
 export function DeleteArtisan({ id }: { id: string }) {
+  // Bind the specific ID directly to the action execution loop
+  const deleteArtisanWithId = deleteArtisan.bind(null, id);
+
   return (
-    <>
-      <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
+    // We must wrap the delete button in a form to submit the action directly
+    <form action={deleteArtisanWithId}>
+      <button type="submit" className="rounded-md border p-2 hover:bg-red-100 hover:text-red-600">
         <span className="sr-only">Delete</span>
         <TrashIcon className="w-5" />
       </button>
-    </>
+    </form>
   );
 }

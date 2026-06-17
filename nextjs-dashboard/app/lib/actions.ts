@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import postgres from 'postgres';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
+import { ArtisanState } from './definitions';
 
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
@@ -240,4 +241,128 @@ export async function authenticate(
     }
     throw error;
   }
+}
+
+// app/lib/actions.ts
+// ... (keep your existing imports, but ensure you have: import { ArtisanState } from './definitions';)
+
+/**
+ * ZOD SCHEMA: Defines validation rules for all artisan forms.
+ */
+const ArtisanSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
+  image_url: z.string().url({ message: 'Invalid image URL.' }).optional(),
+  bio: z.string().min(10, { message: 'Bio must be at least 10 characters.' }),
+  user_id: z.string().uuid({ message: 'Please provide a valid user account link.' }),
+});
+
+// Separate schemata for different actions, mirroring the Invoice pattern.
+const CreateArtisanZod = ArtisanSchema.omit({ id: true });
+const UpdateArtisanZod = ArtisanSchema.omit({ id: true });
+
+
+/**
+ * ACTION: createArtisan (Same Style as createInvoice)
+ */
+export async function createArtisan(prevState: ArtisanState, formData: FormData) {
+  // Validate form data using Zod
+  const validatedFields = CreateArtisanZod.safeParse({
+    name: formData.get('name'),
+    email: formData.get('email'),
+    image_url: formData.get('image_url') || undefined,
+    bio: formData.get('bio'),
+    user_id: formData.get('user_id'), 
+  });
+ 
+  // If form validation fails, return errors early.
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Create Artisan Profile.',
+    };
+  }
+ 
+  const { name, email, image_url, bio, user_id } = validatedFields.data;
+  const fallbackImage = image_url || 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80';
+
+  // Insert data into the database
+  try {
+    await sql`
+      INSERT INTO artisans (name, email, image_url, bio, user_id)
+      VALUES (${name}, ${email}, ${fallbackImage}, ${bio}, ${user_id})
+    `;
+  } catch (error) {
+    console.error('Database Error:', error);
+    return {
+      message: 'Database Error: Failed to Create Artisan Profile.',
+    };
+  }
+ 
+  // Clear cache and redirect (Invoice Style)
+  revalidatePath('/dashboard/artisans');
+  redirect('/dashboard/artisans');
+}
+
+/**
+ * ACTION: updateArtisan (Same Style as updateInvoice)
+ */
+export async function updateArtisan(
+  id: string,
+  prevState: ArtisanState,
+  formData: FormData,
+) {
+  const validatedFields = UpdateArtisanZod.safeParse({
+    name: formData.get('name'),
+    email: formData.get('email'),
+    image_url: formData.get('image_url') || undefined,
+    bio: formData.get('bio'),
+    user_id: formData.get('user_id'),
+  });
+ 
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Update Artisan.',
+    };
+  }
+ 
+  const { name, email, image_url, bio, user_id } = validatedFields.data;
+
+  const postgresImageUrl = image_url ? image_url : null;
+ 
+  try {
+    await sql`
+      UPDATE artisans
+      SET name = ${name}, email = ${email}, image_url = ${postgresImageUrl}, bio = ${bio}, user_id = ${user_id}
+      WHERE id = ${id}
+    `;
+  } catch (error) {
+    console.error('Database Error:', error);
+    return { message: 'Database Error: Failed to Update Artisan Profile.' };
+  }
+ 
+  revalidatePath('/dashboard/artisans');
+  redirect('/dashboard/artisans');
+}
+
+/**
+ * ACTION: deleteArtisan (Same Style as deleteInvoice)
+ */
+export async function deleteArtisan(id: string) {
+  try {
+    // 1. Run the database deletion
+    await sql`DELETE FROM artisans WHERE id = ${id}`;
+    
+    // 2. Clear the cache to refresh the layout page immediately
+    revalidatePath('/dashboard/artisans');
+    
+  } catch (error) {
+    // Invoice pattern style: log the error on the server and do not return an object.
+    console.error('Database Error:', error);
+  }
+  
+  // By leaving this function with NO return statements, JavaScript implicitly 
+  // returns undefined, matching the exact Promise<void> signature required by form actions.
 }

@@ -103,3 +103,14 @@ export type InvoiceForm = {
   amount: number;
   status: 'pending' | 'paid';
 };
+
+export type ArtisanState = {
+  errors?: {
+    name?: string[];
+    email?: string[];
+    image_url?: string[];
+    bio?: string[];
+    user_id?: string[];
+  };
+  message?: string | null;
+};
