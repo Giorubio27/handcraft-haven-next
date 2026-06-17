@@ -263,5 +263,20 @@ export async function fetchFeaturedArtisans() {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the latest invoices.');
   }
+};
+
+export async function fetchArtisanById(id: string) {
+  try {
+    const data = await sql<ArtisansTable[]>`
+      SELECT id, name, email, image_url, bio
+      FROM artisans
+      WHERE id = ${id}
+    `;
+
+    return data[0]; // Return the single matching record object
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch artisan profile data.');
+  }
 }
 

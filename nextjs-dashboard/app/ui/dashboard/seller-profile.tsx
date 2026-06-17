@@ -3,6 +3,7 @@ import { playfairDisplay } from '@/app/ui/fonts';
 import { EnvelopeIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import { ArtisansTable } from '@/app/lib/definitions';
 
+
 export default function SellerProfileCard({ artisan }: { artisan: ArtisansTable }) {
   return (
     <div className="rounded-xl bg-gray-50 p-6 shadow-sm md:p-8">

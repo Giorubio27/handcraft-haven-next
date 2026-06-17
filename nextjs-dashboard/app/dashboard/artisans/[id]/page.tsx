@@ -1,43 +1,35 @@
 import { notFound } from 'next/navigation';
-import postgres from 'postgres';
-import { ArtisansTable } from '@/app/lib/definitions';
-import SellerProfileCard from '@/app/ui/dashboard/seller-profile';
-import Breadcrumbs from '@/app/ui/artisans/breadcrumbs';
+import { fetchArtisanById } from '@/app/lib/data'; // Adjust this import path to your data fetcher
+import SellerProfileCard from '@/app/ui/dashboard/seller-profile'; // Adjust this import path to your component
+import Breadcrumbs from '@/app/ui/artisans/breadcrumbs'; // Reusing your breadcrumbs component
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
-
-async function fetchArtisanById(id: string) {
-  try {
-    const data = await sql<ArtisansTable[]>`
-      SELECT id, name, email, image_url, bio 
-      FROM artisans 
-      WHERE id = ${id}
-    `;
-    return data[0];
-  } catch (error) {
-    console.error('Database Error:', error);
-    return null;
-  }
-}
-
-export default async function Page({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+  const id = params.id;
+  
+  // Fetch the specific artisan data using the ID from the URL
   const artisan = await fetchArtisanById(id);
 
+  // If the ID structure is valid but no matching record is found in the database, trigger Next.js 404
   if (!artisan) {
     notFound();
   }
 
   return (
-    <main className="w-full max-w-4xl mx-auto px-4">
+    <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Dashboard', href: '/dashboard' },
           { label: 'Artisans', href: '/dashboard/artisans' },
-          { label: `${artisan.name}`, href: `/dashboard/artisans/${id}`, active: true },
+          {
+            label: `${artisan.name} Profile`,
+            href: `/dashboard/artisans/${id}`,
+            active: true,
+          },
         ]}
       />
-      <SellerProfileCard artisan={artisan} />
+      <div className="mt-6">
+        <SellerProfileCard artisan={artisan} />
+      </div>
     </main>
   );
 }
