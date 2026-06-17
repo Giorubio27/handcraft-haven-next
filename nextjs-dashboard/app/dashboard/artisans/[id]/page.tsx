@@ -6,8 +6,9 @@ import Breadcrumbs from '@/app/ui/artisans/breadcrumbs';
 import ReviewForm from '@/app/ui/marketplace/review-form';
 import Link from 'next/link';
 import Image from 'next/image';
+// 1. Import your auth helper (adjust this path to match your Auth.js/NextAuth setup)
+import { auth } from '@/auth'; 
 
-// 1. Structural contracts to make TypeScript happy with database fields
 interface Product {
   id: string;
   artisan_id: string;
@@ -26,6 +27,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const id = params.id;
   
+  // 2. Fetch the current logged-in user session
+  const session = await auth();
+  const currentUser = session?.user;
+
   // Fetch both base datasets concurrently
   const [artisan, rawProducts] = await Promise.all([
     fetchArtisanById(id),
@@ -36,10 +41,15 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     notFound();
   }
 
-  // Cast the raw product list safely through unknown
+  // 3. Authorization Check for the UI
+  // Checks if the user is you (Admin role/email) OR if the user's account matches this artisan profile
+  const isAuthorized = 
+    currentUser?.role === 'admin' || 
+    currentUser?.email === 'your-admin-email@example.com' || 
+    currentUser?.id === artisan.user_id; // Assumes your artisan table links to a user_id
+
   const products = rawProducts as unknown as Product[];
 
-  // 2. Map over products to fetch their respective reviews from PostgreSQL
   const productsWithReviews: ProductWithReviews[] = await Promise.all(
     products.map(async (product) => {
       const reviews = await fetchReviewsByProductId(product.id);
@@ -60,10 +70,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
         ]}
       />
 
-      {/* Main Seller Story and Card */}
       <SellerProfileCard artisan={artisan} />
 
-      {/* Connected Product Collections Section */}
       <div className="border-t border-gray-200 pt-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
           <div>
@@ -75,18 +83,20 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
             </p>
           </div>
           
-          <Link 
-            href={`/dashboard/artisans/${id}/catalog/manage`}
-            className="inline-flex h-10 items-center justify-center rounded-lg bg-emerald-800 px-4 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
-          >
-            Manage Catalog & Pricing
-          </Link>
+          {/* 4. Conditional Rendering: Only show if Admin or the matching Artisan */}
+          {isAuthorized && (
+            <Link 
+              href={`/dashboard/artisans/${id}/catalog/manage`}
+              className="inline-flex h-10 items-center justify-center rounded-lg bg-emerald-800 px-4 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+            >
+              Manage Catalog & Pricing
+            </Link>
+          )}
         </div>
 
-        {/* Product Grid Layout */}
         {productsWithReviews.length === 0 ? (
           <div className="rounded-xl border border-dashed p-12 text-center text-sm text-gray-500">
-            No products listed in this collection yet. Click "Manage Catalog" to add your first item!
+            No products listed in this collection yet.
           </div>
         ) : (
           <div className="flex flex-col gap-8">
@@ -95,7 +105,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                 key={product.id} 
                 className="group grid grid-cols-1 md:grid-cols-3 gap-6 overflow-hidden rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md"
               >
-                {/* Column 1: Product Info & Image */}
+                {/* Product Column */}
                 <div className="space-y-3">
                   <div className="relative aspect-video w-full bg-gray-100 rounded-lg overflow-hidden">
                     {product.image_url ? (
@@ -117,28 +127,21 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                   </div>
 
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-semibold text-gray-900">
-                      {product.title}
-                    </h3>
+                    <h3 className="font-semibold text-gray-900">{product.title}</h3>
                     <span className="font-bold text-emerald-800 shrink-0">
                       R$ {(product.price / 100).toFixed(2)}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500 line-clamp-3">
-                    {product.description}
-                  </p>
+                  <p className="text-sm text-gray-500 line-clamp-3">{product.description}</p>
                 </div>
 
-                {/* Column 2: Live Feedback Review Feed */}
+                {/* Reviews Column */}
                 <div className="space-y-3 border-t md:border-t-0 md:border-x border-gray-100 pt-4 md:pt-0 md:px-6 h-64 overflow-y-auto">
                   <h4 className="font-semibold text-xs text-gray-400 uppercase tracking-wider">
                     Customer Reviews
                   </h4>
-                  
                   {product.reviews.length === 0 ? (
-                    <p className="text-xs text-gray-400 italic pt-2">
-                      No feedback ratings left for this product yet.
-                    </p>
+                    <p className="text-xs text-gray-400 italic pt-2">No feedback ratings left yet.</p>
                   ) : (
                     <div className="space-y-3">
                       {product.reviews.map((review: any) => (
@@ -154,11 +157,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
                   )}
                 </div>
 
-                {/* Column 3: Interactive Submission Form */}
+                {/* Form Column */}
                 <div className="flex flex-col justify-center border-t md:border-t-0 border-gray-100 pt-4 md:pt-0">
                   <ReviewForm productId={product.id} />
                 </div>
-
               </div>
             ))}
           </div>
