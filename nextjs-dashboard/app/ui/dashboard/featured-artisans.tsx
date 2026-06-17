@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { inter } from '@/app/ui/fonts';
 import { fetchFeaturedArtisans } from '@/app/lib/data';
 
-export default async function LatestInvoices() { // Remove props
+export default async function NewArtisans() { // Remove props
   const featuredArtisansToday = await fetchFeaturedArtisans();
  
   return (

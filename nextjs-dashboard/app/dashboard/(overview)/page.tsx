@@ -7,6 +7,7 @@ import { Suspense } from 'react';
 import { RevenueChartSkeleton, LatestInvoicesSkeleton, CardsSkeleton } from '@/app/ui/skeletons';
 import {  fetchCardData,
 } from '@/app/lib/data';
+import NewArtisans from '@/app/ui/dashboard/featured-artisans';
  
 export default async function Page() {
 
@@ -26,7 +27,7 @@ export default async function Page() {
           <RevenueChart />
         </Suspense>
         <Suspense fallback={<LatestInvoicesSkeleton />}>
-          <LatestInvoices />
+          <NewArtisans />
         </Suspense>
 
       </div>
