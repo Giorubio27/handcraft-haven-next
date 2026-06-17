@@ -279,4 +279,19 @@ export async function fetchArtisanById(id: string) {
     throw new Error('Failed to fetch artisan profile data.');
   }
 }
+// app/lib/data.ts
+export async function fetchProductsByArtisanId(artisanId: string) {
+  try {
+    const data = await sql`
+      SELECT id, title, price, description, category, image_url 
+      FROM products 
+      WHERE artisan_id = ${artisanId}
+      ORDER BY created_at DESC
+    `;
+    return data;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch artisan collection.');
+  }
+}
 
