@@ -7,6 +7,7 @@ import {
   ArchiveBoxIcon,
   PaintBrushIcon,
   GlobeAltIcon,
+  ShoppingBagIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -20,6 +21,9 @@ const links = [
   { name: 'Collections', href: '/dashboard/collections', icon: ArchiveBoxIcon },
   { name: 'Discover', href: '/dashboard/discover', icon: GlobeAltIcon },
   { name: 'Invoices', href: '/dashboard/invoices', icon: DocumentDuplicateIcon },
+  {name: 'Marketplace', 
+    href: '/dashboard/catalog', // <-- Links directly to your new filter page
+    icon: ShoppingBagIcon }
 ];
 
 export default function NavLinks() {
