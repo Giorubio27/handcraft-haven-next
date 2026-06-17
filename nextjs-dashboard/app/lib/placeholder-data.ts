@@ -8,6 +8,23 @@ const users = [
     password: '123456',
   },
 ];
+// Update this section inside @/app/lib/placeholder-data.ts
+const artisans = [
+  {
+    id: '3958dc9e-712f-4377-85e9-fec4b6a6442a', // Use an explicit test ID
+    name: 'Giovanni Rubio',
+    email: 'giovanni@handcraftedhaven.com',
+    image_url: '/artisans/giovanni.png',
+    bio: 'Specializing in custom-carved woodwork and sustainable home decor. Every piece tells a story of craftsmanship and dedication.',
+  },
+  {
+    id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa',
+    name: 'Maria Silva',
+    email: 'maria@handcraftedhaven.com',
+    image_url: '/artisans/maria.png',
+    bio: 'Master ceramicist crafting functional pottery inspired by traditional Brazilian clay methodologies. Made to be held and loved daily.',
+  }
+];
 
 const customers = [
   {
