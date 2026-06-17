@@ -3,6 +3,7 @@ import {
   CustomerField,
   CustomersTableType,
   InvoiceForm,
+  ArtisansTable,
   InvoicesTable,
   LatestInvoiceRaw,
   Revenue,
@@ -215,5 +216,33 @@ export async function fetchFilteredCustomers(query: string) {
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch customer table.');
+  }
+}
+
+export async function fetchFilteredArtisans(
+  query: string,
+  currentPage: number,
+) {
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const artisans = await sql<ArtisansTable[]>`
+      SELECT
+        artisans.id,
+        artisans.name,
+        artisans.email,
+        artisans.image_url
+      FROM artisans
+      WHERE
+        artisans.name ILIKE ${`%${query}%`} OR
+        artisans.email ILIKE ${`%${query}%`}
+      ORDER BY artisans.name DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+
+    return artisans;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch artisans.');
   }
 }
