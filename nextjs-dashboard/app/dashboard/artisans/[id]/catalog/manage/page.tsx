@@ -18,6 +18,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
       {/* Render the clean client form component down below */}
       <AddCatalogItemForm artisanId={id} />
+      
     </main>
   );
 }
