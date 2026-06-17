@@ -16,8 +16,10 @@ const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 export async function fetchReviewsByProductId(productId: string) {
   try {
+    // Make sure column names match your database schema exactly
     const reviews = await sql`
-      SELECT * FROM reviews 
+      SELECT id, product_id, user_name, rating, comment, created_at 
+      FROM reviews 
       WHERE product_id = ${productId}
       ORDER BY created_at DESC
     `;
