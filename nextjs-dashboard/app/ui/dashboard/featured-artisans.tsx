@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { inter } from '@/app/ui/fonts';
 import { fetchFeaturedArtisans } from '@/app/lib/data';
+import Link from 'next/link';
 
 export default async function NewArtisans() { // Remove props
   const featuredArtisansToday = await fetchFeaturedArtisans();
@@ -18,15 +19,11 @@ export default async function NewArtisans() { // Remove props
         <div className="bg-white px-6">
           {featuredArtisansToday.map((artisan, i) => {
             return (
-              <div
-                key={artisan.id}
-                className={clsx(
-                  'flex flex-row items-center justify-between py-4',
-                  {
-                    'border-t': i !== 0,
-                  },
-                )}
-              >
+              <Link 
+                key={artisan.id} 
+                href={`/dashboard/artisans/${artisan.id}`}
+                className="flex flex-row items-center justify-between py-4 hover:bg-gray-50 transition-colors rounded-lg px-2"
+                >
                 <div className="flex items-center">
                   <Image
                     src={artisan.image_url}
@@ -43,13 +40,9 @@ export default async function NewArtisans() { // Remove props
                       {artisan.email}
                     </p>
                   </div>
-                </div>
-                <p
-                  className={`${inter.className} truncate text-sm font-medium md:text-base`}
-                >
-                  
-                </p>
-              </div>
+                    </div>
+                </Link>
+
             );
           })}
         </div>
