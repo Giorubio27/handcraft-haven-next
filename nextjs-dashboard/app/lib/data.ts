@@ -7,6 +7,7 @@ import {
   InvoicesTable,
   LatestInvoiceRaw,
   Revenue,
+  featuredArtisans
 } from './definitions';
 import { formatCurrency } from './utils';
 
@@ -247,3 +248,20 @@ export async function fetchFilteredArtisans(
     throw new Error('Failed to fetch artisans.');
   }
 }
+
+export async function fetchFeaturedArtisans() {
+  try {
+    const data = await sql<featuredArtisans[]>`
+      SELECT  artisans.name, artisans.image_url, artisans.email, artisans.id
+      FROM artisans
+      ORDER BY artisans.name DESC
+      LIMIT 5`;
+
+    
+    return data;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch the latest invoices.');
+  }
+}
+
