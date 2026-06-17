@@ -24,6 +24,64 @@ const FormSchema = z.object({
   }),
   date: z.string(),
 });
+
+const CatalogSchema = z.object({
+  artisanId: z.string().uuid(),
+  title: z.string().min(1, 'Please enter a product title.'),
+  price: z.coerce.number().gt(0, 'Please enter a price greater than 0.'),
+  category: z.string().min(1, 'Please select a category.'),
+  description: z.string().min(5, 'Please provide a short description.'),
+  image_url: z.string().optional(),
+});
+
+// app/lib/actions.ts
+export type CatalogState = {
+  errors?: {
+    title?: string[];
+    price?: string[];
+    category?: string[];
+    description?: string[];
+    image_url?: string[];
+  };
+  message?: string;
+};
+// Update the parameters to accept artisanId first
+export async function createCatalogItem(
+  artisanId: string,
+  prevState: CatalogState,
+  formData: FormData
+): Promise<CatalogState> { // Explicitly typing the return solves overload mismatches
+  const validatedFields = CatalogSchema.safeParse({
+    artisanId: artisanId,
+    title: formData.get('title'),
+    price: formData.get('price'),
+    category: formData.get('category'),
+    description: formData.get('description'),
+    image_url: formData.get('image_url') || undefined,
+  });
+
+  if (!validatedFields.success) {
+    console.error('Validation Errors:', validatedFields.error.flatten().fieldErrors);
+    throw new Error('Invalid Form Fields. Failed to add product.');
+  }
+
+  const { title, price, category, description, image_url } = validatedFields.data;
+  const priceInCents = Math.round(price * 100);
+  const fallbackImage = image_url || 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80';
+
+  try {
+    await sql`
+      INSERT INTO products (artisan_id, title, price, description, category, image_url)
+      VALUES (${artisanId}, ${title}, ${priceInCents}, ${description}, ${category}, ${fallbackImage})
+    `;
+  } catch (error) {
+    console.error('Database Error:', error);
+    return { message: 'Database Error: Failed to add item to catalog.' };
+  }
+
+  revalidatePath(`/dashboard/artisans/${artisanId}`);
+  redirect(`/dashboard/artisans/${artisanId}`);
+}
  
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 
