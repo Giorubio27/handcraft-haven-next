@@ -1,4 +1,11 @@
 import type { NextAuthConfig } from 'next-auth';
+
+// Add this inline declaration here:
+declare module 'next-auth' {
+  interface User {
+    role?: string;
+  }
+}
  
 export const authConfig = {
   pages: {

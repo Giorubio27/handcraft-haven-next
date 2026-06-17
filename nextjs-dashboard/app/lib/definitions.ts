@@ -4,9 +4,11 @@
 // However, these types are generated automatically if you're using an ORM such as Prisma.
 export type User = {
   id: string;
+  role: string;
   name: string;
   email: string;
   password: string;
+
 };
 
 export type Customer = {
@@ -67,6 +69,7 @@ export type ArtisansTable = {
   email: string,
   image_url: string;
   bio: string;
+  user_id: string;
 }
 
 export type CustomersTableType = {
