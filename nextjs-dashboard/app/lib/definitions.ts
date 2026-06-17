@@ -48,7 +48,8 @@ export type featuredArtisans = {
   name: string;
   image_url: string;
   email: string;
-  
+  bio: string;
+
 }
 export type InvoicesTable = {
   id: string;
@@ -64,7 +65,8 @@ export type ArtisansTable = {
   id: string,
   name: string,
   email: string,
-  image_url: string
+  image_url: string;
+  bio: string;
 }
 
 export type CustomersTableType = {
