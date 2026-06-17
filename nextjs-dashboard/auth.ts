@@ -44,18 +44,29 @@ export const { auth, signIn, signOut } = NextAuth({
           return null;
         }
 
-        const { email, password } = parsedCredentials.data;
-        const user = await getUser(email);
-        
-        if (!user) {
-          console.log("❌ Authentication Rejected: Email not registered.");
-          return null;
-        }
+        // Inside auth.ts -> authorize(credentials)
 
-        console.log("🔒 Verifying password hash...");
-        const passwordsMatch = await bcrypt.compare(password, user.password);
-        console.log("🔑 Password verification match result:", passwordsMatch);
+const { email, password } = parsedCredentials.data;
+const user = await getUser(email);
 
+if (!user) {
+  console.log("❌ Authentication Rejected: Email not registered.");
+  return null;
+}
+
+// 🪵 DIAGNOSTIC LOGS: Let's see exactly what your Next.js process is reading!
+console.log("==================================================");
+console.log("👉 PLAIN TEXT ENTERED:", password);
+console.log("👉 STRING STORED IN DB ROW:", user.password);
+console.log("👉 STRING LENGTH:", user.password?.length);
+console.log("==================================================");
+
+// 🧪 SANITY TEST: Verify if bcryptjs matches the hardcoded string manually
+const hardwareTest = await bcrypt.compare('password123', '$2b$10$fVqX0X7kAnA79P02Q1W0beH1K8A0T8L/EaFOmgLgA3n5V3XfOnX6G');
+console.log("🧪 INLINE SANITY TEST MATCHES:", hardwareTest); // This MUST be true
+
+const passwordsMatch = await bcrypt.compare(password, user.password);
+console.log("🔑 Actual database password match result:", passwordsMatch);
         if (passwordsMatch) {
           console.log("🎉 SUCCESS! User authenticated cleanly.");
           return {
