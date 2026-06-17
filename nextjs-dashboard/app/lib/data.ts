@@ -7,12 +7,27 @@ import {
   InvoicesTable,
   LatestInvoiceRaw,
   Revenue,
-  featuredArtisans
+  featuredArtisans, 
+  User
 } from './definitions';
 import { formatCurrency } from './utils';
 
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+
+export async function fetchUsers() {
+  try {
+    const data = await sql<User[]>`
+    SELECT id, name, email
+    FROM users
+    ORDER BY name ASC
+    `;
+    return data;
+  } catch (error) {
+    console.error('database ERROR:', error)
+    throw new Error('Failed to fetch all user accounts')
+  }
+}
 
 export async function fetchReviewsByProductId(productId: string) {
   try {
