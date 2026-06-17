@@ -18,12 +18,11 @@ import clsx from 'clsx';
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
   { name: 'Artisans', href: '/dashboard/artisans', icon: PaintBrushIcon },
-  { name: 'Collections', href: '/dashboard/collections', icon: ArchiveBoxIcon },
+  { name: 'Catalog', href: '/dashboard/catalog', // <-- Links directly to your new filter page
+    icon: ShoppingBagIcon },
   { name: 'Discover', href: '/dashboard/discover', icon: GlobeAltIcon },
   { name: 'Invoices', href: '/dashboard/invoices', icon: DocumentDuplicateIcon },
-  {name: 'Marketplace', 
-    href: '/dashboard/catalog', // <-- Links directly to your new filter page
-    icon: ShoppingBagIcon }
+  
 ];
 
 export default function NavLinks() {

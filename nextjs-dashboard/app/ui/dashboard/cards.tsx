@@ -4,7 +4,8 @@ import {
   UserGroupIcon,
   InboxIcon,
   ArchiveBoxIcon, // Example icon for collections
-  PaintBrushIcon, // Example icon for artisans
+  PaintBrushIcon,
+  ShoppingBagIcon, // Example icon for artisans
 } from '@heroicons/react/24/outline';
 import { fetchCardData } from '@/app/lib/data';
 
@@ -14,7 +15,7 @@ const iconMap = {
   customers: UserGroupIcon,
   pending: ClockIcon,
   invoices: InboxIcon,
-  collections: ArchiveBoxIcon, // Example mapping for collections
+  catalog: ShoppingBagIcon, // Example mapping for collections
   artisans: PaintBrushIcon, // Example mapping for artisans
 };
 
@@ -48,7 +49,7 @@ export function Card({
 }: {
   title: string;
   value: number | string;
-  type: 'invoices' | 'pending' | 'collected' | 'collections' | 'artisans' | 'customers';
+  type: 'invoices' | 'pending' | 'collected' | 'catalog' | 'artisans' | 'customers';
 }) {
   const Icon = iconMap[type];
 
