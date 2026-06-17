@@ -1,5 +1,12 @@
 import '@/app/ui/global.css';
 import { inter, playfairDisplay } from "@/app/ui/fonts";
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Handcraft Haven',
+  description: 'The official handcraft haven site.',
+  metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),
+};
 
 export default function RootLayout({
   children,
