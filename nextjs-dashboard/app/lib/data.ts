@@ -14,6 +14,20 @@ import { formatCurrency } from './utils';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
+export async function fetchReviewsByProductId(productId: string) {
+  try {
+    const reviews = await sql`
+      SELECT * FROM reviews 
+      WHERE product_id = ${productId}
+      ORDER BY created_at DESC
+    `;
+    return reviews;
+  } catch (error) {
+    console.error('Database Error fetching reviews:', error);
+    throw new Error('Failed to fetch reviews.');
+  }
+}
+
 export async function fetchFilteredProducts(query: string, category: string, maxPrice: number) {
   // Convert price limit to cents for database compliance (default to a high number if blank)
   const maxPriceInCents = maxPrice ? Math.round(maxPrice * 100) : 99999999; 

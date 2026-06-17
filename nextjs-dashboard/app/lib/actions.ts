@@ -82,6 +82,50 @@ export async function createCatalogItem(
   revalidatePath(`/dashboard/artisans/${artisanId}`);
   redirect(`/dashboard/artisans/${artisanId}`);
 }
+
+const ReviewSchema = z.object({
+  productId: z.string().uuid(),
+  userName: z.string().min(1, 'Please enter your name.'),
+  rating: z.coerce.number().min(1).max(5, 'Please select a rating between 1 and 5.'),
+  comment: z.string().min(3, 'Please provide a descriptive comment.'),
+});
+
+export type ReviewState = {
+  errors?: { userName?: string[]; rating?: string[]; comment?: string[] };
+  message?: string;
+};
+
+export async function createProductReview(productId: string, prevState: ReviewState, formData: FormData): Promise<ReviewState> {
+  const validatedFields = ReviewSchema.safeParse({
+    productId: productId,
+    userName: formData.get('userName'),
+    rating: formData.get('rating'),
+    comment: formData.get('comment'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Validation failed. Could not submit review.',
+    };
+  }
+
+  const { userName, rating, comment } = validatedFields.data;
+
+  try {
+    await sql`
+      INSERT INTO reviews (product_id, user_name, rating, comment)
+      VALUES (${productId}, ${userName}, ${rating}, ${comment})
+    `;
+  } catch (error) {
+    console.error('Database error adding review:', error);
+    return { message: 'Database failure: failed to submit review details.' };
+  }
+
+  // Hard revalidate back to the artisan view layout to sync changes
+  revalidatePath(`/dashboard/artisans`);
+  return { message: 'Review added successfully!' }; 
+}
  
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 
