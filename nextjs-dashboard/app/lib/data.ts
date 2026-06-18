@@ -31,7 +31,7 @@ export async function fetchUsers() {
 
 export async function fetchDiscoverCatalog() {
   try {
-    const data = sql`
+    const data = await sql`
     SELECT 
     p.id,
     p.title,
@@ -39,9 +39,9 @@ export async function fetchDiscoverCatalog() {
     p.category,
     p.image_url AS product_image,
     p.description,
-    a.id, a.name, a.image_url AS artisan_image
+    a.id AS artisan_id, a.name, a.image_url AS artisan_image
     FROM products p
-    JOIN artisans a ON p.artisans_id = a.id
+    JOIN artisans a ON p.artisan_id = a.artisan_id
     ORDER BY RANDOM()
     `;
     return data;
