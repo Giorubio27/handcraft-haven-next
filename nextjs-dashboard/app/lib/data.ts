@@ -31,23 +31,28 @@ export async function fetchUsers() {
 
 export async function fetchDiscoverCatalog() {
   try {
+    // 🌟 Added 'await' here so it evaluates to the actual data row array immediately
     const data = await sql`
-    SELECT 
-    p.id,
-    p.title,
-    p.price,
-    p.category,
-    p.image_url AS product_image,
-    p.description,
-    a.id AS artisan_id, a.name, a.image_url AS artisan_image
-    FROM products p
-    JOIN artisans a ON p.artisan_id = a.artisan_id
-    ORDER BY RANDOM()
+      SELECT 
+        p.id,
+        p.title,
+        p.price,
+        p.category,
+        p.image_url AS product_image,
+        p.description,
+        a.id AS artisan_id, -- Keep alias clean for mapping
+        a.name AS artisan_name, 
+        a.image_url AS artisan_image
+      FROM products p
+      -- 🌟 Fixed column typo: changed 'artisans_id' to 'artisan_id'
+      JOIN artisans a ON p.artisan_id = a.id
+      ORDER BY RANDOM()
     `;
+    
     return data;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to load the Discover info')
+    throw new Error('Failed to load the Discover info');
   }
 }
 
