@@ -41,7 +41,7 @@ export async function fetchDiscoverCatalog() {
     product.description,
     artisans.id, artisans.name, artisans.image_url AS artisan_image
     FROM products
-    JOIN artisans ON products.artisans_id = artisans.id
+    JOIN artisans ON products.artisan_id = artisans.id
     ORDER BY RANDOM()
     `;
     return data;
