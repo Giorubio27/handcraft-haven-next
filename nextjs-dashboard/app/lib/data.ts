@@ -33,15 +33,15 @@ export async function fetchDiscoverCatalog() {
   try {
     const data = sql`
     SELECT 
-    product.id,
-    product.title,
-    product.price,
-    product.category,
-    product.image_url AS product_image,
-    product.description,
-    artisans.id, artisans.name, artisans.image_url AS artisan_image
-    FROM products
-    JOIN artisans ON products.artisan_id = artisans.id
+    p.id,
+    p.title,
+    p.price,
+    p.category,
+    p.image_url AS product_image,
+    p.description,
+    a.id, a.name, a.image_url AS artisan_image
+    FROM products p
+    JOIN artisans a ON p.artisans_id = a.id
     ORDER BY RANDOM()
     `;
     return data;
