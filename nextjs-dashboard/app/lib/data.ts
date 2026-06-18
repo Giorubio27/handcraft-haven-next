@@ -29,6 +29,28 @@ export async function fetchUsers() {
   }
 }
 
+export async function fetchDiscoverCatalog() {
+  try {
+    const data = sql`
+    SELECT 
+    product.id,
+    product.title,
+    product.price,
+    product.category,
+    product.image_url AS product_image,
+    product.description,
+    artisans.id, artisans.name, artisans.image_url AS artisan_image
+    FROM products
+    JOIN artisans ON products.artisans_id = artisans.id
+    ORDER BY RANDOM()
+    `;
+    return data;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to load the Discover info')
+  }
+}
+
 export async function fetchReviewsByProductId(productId: string) {
   try {
     // Make sure column names match your database schema exactly

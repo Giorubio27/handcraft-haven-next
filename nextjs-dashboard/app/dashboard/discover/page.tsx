@@ -1,38 +1,32 @@
-import Pagination from '@/app/ui/invoices/pagination';
-import Search from '@/app/ui/search';
-import ArtisansTable from '@/app/ui/artisans/table';
-import { CreateArtisan } from '@/app/ui/artisans/buttons';
-import { playfairDisplay } from '@/app/ui/fonts';
-import { DiscoverSkeleton } from '@/app/ui/skeletons';
-import { Suspense } from 'react';
-import { fetchInvoicesPages } from '@/app/lib/data';
- 
-export default async function Page(props: {
-  searchParams?: Promise<{
-    query?: string;
-    page?: string;
-  }>;
-}) {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
-  const totalPages = await fetchInvoicesPages(query);
-  
+// app/dashboard/discover/page.tsx
+import { fetchDiscoverCatalog } from '@/app/lib/data';
+import DiscoverFeed from '@/app/ui/discover/discover-feed';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Discover Unique Handcrafts',
+};
+
+export default async function Page() {
+  const items = await fetchDiscoverCatalog();
+
+  // Extract unique categories dynamically so filter buttons update automatically if database entries grow
+  const categories = ['All', ...new Set(items.map((item: any) => item.category))];
+
   return (
-    <div className="w-full">
-      <div className="flex w-full items-center justify-between">
-        <h1 className={`${playfairDisplay.className} text-2xl`}>Discover with us</h1>
+    <main className="space-y-8 p-4 md:p-6 max-w-7xl mx-auto">
+      {/* Visual Hero Block */}
+      <div className="rounded-2xl bg-gradient-to-r from-amber-50 to-orange-100 p-8 md:p-12 border border-orange-200/60 shadow-sm">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
+          Discover Extraordinary Crafts
+        </h1>
+        <p className="mt-2 text-gray-600 max-w-md text-sm md:text-base">
+          Explore unique, hand-built treasures curated directly from independent studio artisans.
+        </p>
       </div>
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        
-        
-      </div>
-       <Suspense key={query + currentPage} fallback={<DiscoverSkeleton />}>
-        
-      </Suspense>
-      <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={totalPages} />
-      </div>
-    </div>
+
+      {/* Feed Area containing interactive filters */}
+      <DiscoverFeed initialItems={items} categories={categories} />
+    </main>
   );
 }
