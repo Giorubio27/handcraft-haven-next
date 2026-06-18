@@ -1,5 +1,5 @@
 import { fetchDiscoverCatalog } from '@/app/lib/data';
-import DiscoveryFeed from '@/app/ui/discover/discover-feed';
+import DiscoverFeed from '@/app/ui/discover/discover-feed';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -21,7 +21,7 @@ export default async function Page() {
         </h1>
         <p className='mt-2 text-gray-500'>Explore our Haven</p>
       </div>
-      <DiscoveryFeed initialItems={items} categories={categories} />
+      <DiscoverFeed initialItems={items} categories={categories} />
     </main>
   )
 }
