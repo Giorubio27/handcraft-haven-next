@@ -9,7 +9,7 @@ export async function LatestCatalog() {
 
 
     return (
-        <div className="flex w-full flex-col md:col-span-2 border-2 border-teal-900">
+        <div className="flex w-full flex-col md:col-span-4">
               <h2 className={`${inter.className} mb-4 text-xl md:text-2xl`}>
                 Latest Catalog Items
               </h2>
