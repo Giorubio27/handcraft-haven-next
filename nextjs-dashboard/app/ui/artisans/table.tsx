@@ -33,7 +33,9 @@ export default async function ArtisansTable({
                         height={28}
                         alt={`${artisan.name}'s profile picture`}
                       />
-                      <Link key={artisan.id} href={`/dashboard/artisans/${artisan.id}`} className='text-gray-800 font-medium'>{artisan.name}</Link>
+                      <Link key={artisan.id} href={`/dashboard/artisans/${artisan.id}`}>
+                        <p>{artisan.name}</p>
+                      </Link>
                     </div>
                     <p className="text-sm text-gray-500">{artisan.email}</p>
                   </div>
