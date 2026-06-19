@@ -60,7 +60,7 @@ export type featuredCatalog = {
   price: number;
   description: string;
   category: string;
-  image_url: string;
+  product_image: string;
 
 }
 export type InvoicesTable = {
