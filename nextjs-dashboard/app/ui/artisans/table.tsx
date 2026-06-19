@@ -18,9 +18,9 @@ export default async function ArtisansTable({
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
             {artisans?.map((artisan) => (
-              <div
-                key={artisan.id}
-                className="mb-2 w-full rounded-md bg-white p-4"
+              <Link key={artisan.id} href={`/dashboard/artisans/${artisan.id}`} className='flex flex-row items-center justify-between py-4 hover:bg-gray-50 transition-colors rounded-lg px-2'
+                
+                
               >
                 
                 <div className="flex items-center justify-between border-b pb-4">
@@ -33,9 +33,7 @@ export default async function ArtisansTable({
                         height={28}
                         alt={`${artisan.name}'s profile picture`}
                       />
-                      <Link key={artisan.id} href={`/dashboard/artisans/${artisan.id}`}>
-                        <p>{artisan.name}</p>
-                      </Link>
+                      <p>{artisan.name}</p>
                     </div>
                     <p className="text-sm text-gray-500">{artisan.email}</p>
                   </div>
@@ -45,7 +43,7 @@ export default async function ArtisansTable({
                     <UpdateArtisan id={artisan.id} />
                     <DeleteArtisan id={artisan.id} />
                   </div>
-                </div>
+                </Link>
               
             ))}
           </div>
