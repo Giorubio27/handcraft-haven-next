@@ -3,60 +3,48 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { inter } from '@/app/ui/fonts';
 import { fetchFeaturedCatalog } from '@/app/lib/data';
+import Link from 'next/link';
+import { formatCurrency } from '@/app/lib/utils';
 
 export async function LatestCatalog() {
-    const latestGoods = await fetchFeaturedCatalog();
+  const latestGoods = await fetchFeaturedCatalog();
 
 
-    return (
-        <div className="flex w-full flex-col md:col-span-4">
-              <h2 className={`${inter.className} mb-4 text-xl md:text-2xl`}>
-                Latest Catalog Items
-              </h2>
-              <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
-                {/* NOTE: Uncomment this code in Chapter 7 */}
-        
-                <div className="bg-white px-6">
-                  {latestGoods.map((good, i) => {
-                    return (
-                      <div
-                        key={good.id}
-                        className={clsx(
-                          'flex flex-row items-center justify-between py-4',
-                          {
-                            'border-t': i !== 0,
-                          },
-                        )}
-                      >
-                        <div className="flex items-center">
-                          <Image
-                            src={good.image_url}
-                            alt={`${good.title}'s profile picture`}
-                            className="mr-4 rounded-full"
-                            width={32}
-                            height={32}
-                          />
-                          <div className="min-w-0">
-                            <p className="truncate text-sm font-semibold md:text-base">
-                              {good.title}
-                            </p>
-                           
-                          </div>
-                        </div>
-                        <p
-                          className={`${inter.className} truncate text-sm font-medium md:text-base`}
-                        >
-                          {good.price}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="flex items-center pb-2 pt-6">
-                  <ArrowPathIcon className="h-5 w-5 text-gray-500" />
-                  <h3 className="ml-2 text-sm text-gray-500 ">Updated just now</h3>
-                </div>
+  return (
+    (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {latestGoods.map((item) => (
+          <div key={item.id} className="group bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                            
+            {/* Product image window */}
+            <div className="relative aspect-square bg-gray-100 overflow-hidden">
+              <Image
+                src={item.image_url || '/products/placeholder.png'}
+                alt={item.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 25vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+
+            {/* Information block */}
+            <div className="p-4 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 className="font-semibold text-gray-900 line-clamp-1">{item.title}</h3>
+                <p className="text-xs text-gray-500 mt-1 line-clamp-2 min-h-[32px]">{item.description}</p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                <span className="text-base font-bold text-gray-900">{formatCurrency(item.price)}</span>
+
+                
+                
               </div>
             </div>
+
+          </div>
+        ))}
+      </div>
     )
+      
+  )
 }
