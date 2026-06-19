@@ -39,7 +39,7 @@ export async function fetchDiscoverCatalog() {
     p.category,
     p.description,
     p.price,
-    p.image_url,
+    p.image_url AS product_image
     a.id AS artisan_id,
     a.name AS artisan_name,
     a.image_url AS artisan_image
