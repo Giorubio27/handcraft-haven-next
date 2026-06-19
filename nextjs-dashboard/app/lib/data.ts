@@ -8,6 +8,7 @@ import {
   LatestInvoiceRaw,
   Revenue,
   featuredArtisans, 
+  featuredCatalog,
   User
 } from './definitions';
 import { formatCurrency } from './utils';
@@ -374,4 +375,27 @@ export async function fetchProductsByArtisanId(artisanId: string) {
     throw new Error('Failed to fetch artisan collection.');
   }
 }
+
+export async function fetchFeaturedCatalog() {
+  try {
+    const data = await sql<featuredCatalog[]>`
+      SELECT
+      p.id,
+      p.title,
+      p.description,
+      p.price,
+      p.image_url AS product_image,
+      a.id AS artisan_id,
+      a.name AS artisan_name
+      FROM products p
+      JOIN artisans a ON p.artisan_id = a.id
+    ORDER BY RANDOM() `;
+
+    
+    return data;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch the latest invoices.');
+  }
+};
 

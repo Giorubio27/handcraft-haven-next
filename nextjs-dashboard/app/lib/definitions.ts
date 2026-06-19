@@ -53,6 +53,16 @@ export type featuredArtisans = {
   bio: string;
 
 }
+export type featuredCatalog = {
+  id: string;
+  artisan_id: string;
+  title: string;
+  price: number;
+  description: string;
+  category: string;
+  image_url: string;
+
+}
 export type InvoicesTable = {
   id: string;
   customer_id: string;
