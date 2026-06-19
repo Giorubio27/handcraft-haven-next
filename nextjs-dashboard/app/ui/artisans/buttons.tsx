@@ -22,6 +22,7 @@ export function DiscoverArtisan({ id }: { id: string }) {
     <Link
       href={`/dashboard/artisans/${id}/`} // Points to the dynamic [id]/edit/page.tsx route
       className="rounded-md border p-2 hover:bg-gray-100"
+      aria-placeholder='Discover'
     >
       <GlobeAltIcon className="w-5" />
     </Link>
@@ -34,6 +35,7 @@ export function UpdateArtisan({ id }: { id: string }) {
     <Link
       href={`/dashboard/artisans/${id}/edit`} // Points to the dynamic [id]/edit/page.tsx route
       className="rounded-md border p-2 hover:bg-gray-100"
+      aria-placeholder='Update'
     >
       <PencilIcon className="w-5" />
     </Link>
@@ -48,7 +50,7 @@ export function DeleteArtisan({ id }: { id: string }) {
   return (
     // We must wrap the delete button in a form to submit the action directly
     <form action={deleteArtisanWithId}>
-      <button type="submit" className="rounded-md border p-2 hover:bg-red-100 hover:text-red-600">
+      <button type="submit" className="rounded-md border p-2 hover:bg-red-100 hover:text-red-600" aria-placeholder='Delete'>
         <span className="sr-only">Delete</span>
         <TrashIcon className="w-5" />
       </button>
