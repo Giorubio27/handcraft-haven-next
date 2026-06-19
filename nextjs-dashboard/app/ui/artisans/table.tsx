@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { fetchFilteredArtisans } from '@/app/lib/data';
 import { CreateArtisan, UpdateArtisan, DeleteArtisan } from './buttons';
+import Link from 'next/link';
 
 export default async function ArtisansTable({
   query,
@@ -21,6 +22,7 @@ export default async function ArtisansTable({
                 key={artisan.id}
                 className="mb-2 w-full rounded-md bg-white p-4"
               >
+                
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
                     <div className="mb-2 flex items-center">
@@ -31,7 +33,7 @@ export default async function ArtisansTable({
                         height={28}
                         alt={`${artisan.name}'s profile picture`}
                       />
-                      <p>{artisan.name}</p>
+                      <Link key={artisan.id} href={`/dashboard/artisans/${artisan.id}`} className='text-gray-800 font-medium'>{artisan.name}</Link>
                     </div>
                     <p className="text-sm text-gray-500">{artisan.email}</p>
                   </div>
