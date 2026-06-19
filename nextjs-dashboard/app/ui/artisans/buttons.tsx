@@ -1,7 +1,7 @@
 
 
 // app/ui/artisans/buttons.tsx
-import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, PlusIcon, TrashIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteArtisan } from '@/app/lib/actions'; // Import the newly created action
 
@@ -14,6 +14,16 @@ export function CreateArtisan() {
     >
       <span className="hidden md:block">Create Artisan</span>{' '}
       <PlusIcon className="h-5 md:ml-4" />
+    </Link>
+  );
+}
+export function DiscoverArtisan({ id }: { id: string }) {
+  return (
+    <Link
+      href={`/dashboard/artisans/${id}/`} // Points to the dynamic [id]/edit/page.tsx route
+      className="rounded-md border p-2 hover:bg-gray-100"
+    >
+      <GlobeAltIcon className="w-5" />
     </Link>
   );
 }

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { fetchFilteredArtisans } from '@/app/lib/data';
-import { CreateArtisan, UpdateArtisan, DeleteArtisan } from './buttons';
+import { CreateArtisan, UpdateArtisan, DeleteArtisan, DiscoverArtisan } from './buttons';
 import Link from 'next/link';
 
 export default async function ArtisansTable({
@@ -101,6 +101,7 @@ export default async function ArtisansTable({
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
+                      <DiscoverArtisan id={artisan.id} />
                       <UpdateArtisan id={artisan.id} />
                       <DeleteArtisan id={artisan.id} />
                     </div>
